@@ -11,6 +11,7 @@ const Login = () => {
     const dispatch = useDispatch();
     const [emailId, setEmailId] = useState("himmu@gmail.com");
     const [password, setPassword] = useState("Himmu@123");
+    const [error, setError] = useState("");
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -19,13 +20,12 @@ const Login = () => {
                 emailId,
                 password,
             }, { withCredentials: true })
-
             dispatch(addUser(res.data))
+            navigate('/')
         }
         catch (err) {
-            console.log(err)
+            setError(err?.response?.data || "Something went wrong")
         }
-        navigate('/')
     }
 
     return (
@@ -60,6 +60,7 @@ const Login = () => {
                             />
                         </div>
                         <div className="form-control mt-6">
+                            <p className='text-red-500 pb-2'>{error}</p>
                             <button onClick={handleLogin} className="btn bg-black bg-opacity-50 backdrop-filter backdrop-blur-md text-white w-full border border-white border-opacity-70">
                                 Login
                             </button>
