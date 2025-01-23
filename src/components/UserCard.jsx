@@ -2,7 +2,7 @@ import React from 'react';
 
 
 const UserCard = ({ user }) => {
-    const { firstName, lastName, about, age, skills, photoUrl } = user;
+    const { firstName, lastName, about, age, skills, photoUrl, gender } = user;
     return (
         <div className="card w-96 bg-base-300 shadow-xl hover:shadow-2xl transition-shadow duration-200 m-4">
             <figure className="px-10 pt-10">
@@ -10,8 +10,8 @@ const UserCard = ({ user }) => {
             </figure>
             <div className="card-body items-center text-center">
                 <h2 className="card-title">{firstName} {lastName}</h2>
-                <div className="badge bg-blue-500 text-white py-2 px-4 rounded-lg my-2">Age: {age}</div>
-                <div className="flex flex-wrap gap-2 justify-center mt-2">
+                <div className="badge bg-blue-500 text-white py-2 px-4 rounded-lg my-2">Age: {age} , {gender}</div>
+                <div className=" flex flex-wrap gap-2 justify-center mt-2">
                     <strong>Skills:</strong>
                     {skills && skills.map((skill, index) => (
                         <span key={index} className="badge badge-primary badge-lg">{skill}</span>

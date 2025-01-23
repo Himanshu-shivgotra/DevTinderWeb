@@ -1,11 +1,17 @@
-import axios from 'axios'
-import React from 'react'
-
+import React, { useState } from 'react';
+import EditProfile from '../components/EditProfile';
+import { useSelector } from 'react-redux';
 
 const Profile = () => {
-    return (
-        <div>Profile</div>
-    )
-}
+    const user = useSelector((store) => store.user)
 
-export default Profile
+    return (
+        user && (
+            <div>
+                <EditProfile user={user} />
+            </div>
+        )
+    )
+};
+
+export default Profile;

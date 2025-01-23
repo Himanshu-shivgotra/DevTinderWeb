@@ -32,7 +32,7 @@ const Navbar = () => {
                 {user ? (
                     <>
                         <p className="hidden md:block text-lg font-medium">
-                            Welcome, {user.firstName}!
+                            Welcome, {user.firstName}
                         </p>
                         <div className="dropdown dropdown-end mx-5">
                             <div
@@ -59,7 +59,10 @@ const Navbar = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to={"/settings"} className="hover:bg-gray-200 transition-colors">Settings</Link>
+                                    <Link to={"/connections"} className="hover:bg-gray-200 transition-colors">Connections</Link>
+                                </li>
+                                <li>
+                                    <Link to={"/requests"} className="hover:bg-gray-200 transition-colors">Connections Requests</Link>
                                 </li>
                                 <li>
                                     <Link onClick={handleLogout} className="hover:bg-gray-200 transition-colors">Logout</Link>
