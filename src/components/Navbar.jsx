@@ -72,7 +72,7 @@ const Navbar = () => {
                     </>
                 ) : (
                     <button className="btn btn-primary px-6 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-md">
-                        Sign Up
+                        🧑‍💻
                     </button>
                 )}
             </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import UserCard from './userCard';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
@@ -6,38 +6,54 @@ import { useDispatch } from 'react-redux';
 import { addUser } from '../redux/userSlice';
 
 const EditProfile = ({ user }) => {
-    const [firstName, setFirstName] = useState(user.firstName);
-    const [lastName, setLastName] = useState(user.lastName);
-    const [age, setAge] = useState(user.age);
-    const [gender, setGender] = useState(user.gender);
-    const [about, setAbout] = useState(user.about);
-    const [skills, setSkills] = useState(user.skills);
-    const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
+    const [firstName, setFirstName] = useState(user.firstName || '');
+    const [lastName, setLastName] = useState(user.lastName || '');
+    const [age, setAge] = useState(user.age || '');
+    const [gender, setGender] = useState(user.gender || '');
+    const [about, setAbout] = useState(user.about || '');
+    const [skills, setSkills] = useState(user.skills || []);
+    const [currentSkill, setCurrentSkill] = useState('');
+    const [photoUrl, setPhotoUrl] = useState(user.photoUrl || '');
     const [error, setError] = useState('');
     const [showToast, setShowToast] = useState(false);
     const dispatch = useDispatch();
 
-
     const handleSave = async (e) => {
         e.preventDefault();
+        setError('');
         try {
-            const res = await axios.patch(BASE_URL + '/profile/edit', {
-                firstName, lastName, photoUrl, age, gender, skills, about
-            }, { withCredentials: true },)
-            dispatch(addUser(res?.data?.data))
+            const res = await axios.patch(
+                `${BASE_URL}/profile/edit`,
+                { firstName, lastName, photoUrl, age, gender, skills, about },
+                { withCredentials: true }
+            );
+            dispatch(addUser(res?.data?.data));
             setShowToast(true);
             setTimeout(() => {
-                setShowToast(false)
+                setShowToast(false);
             }, 3000);
         } catch (err) {
-            setError(err.response.data || "something went wrong");
+            setError(err.response?.data || 'Something went wrong');
         }
     };
+
+    const addSkill = () => {
+        if (currentSkill.trim() && !skills.includes(currentSkill.trim())) {
+            setSkills([...skills, currentSkill.trim()]);
+            setCurrentSkill('');
+        }
+    };
+
+    const removeSkill = (e, skillToRemove) => {
+        e.preventDefault()
+        setSkills(skills.filter((skill) => skill !== skillToRemove));
+    };
+
     return (
         <>
-            <div className='flex justify-center mx-10'>
+            <div className="flex justify-center mx-10">
                 <div className="flex items-center justify-center h-full bg-gray-900 my-6">
-                    <div className="card w-96 bg-base-300  backdrop-filter backdrop-blur-md shadow-xl border border-white border-opacity-30">
+                    <div className="card w-96 bg-base-300 backdrop-filter backdrop-blur-md shadow-xl border border-white border-opacity-30">
                         <div className="card-body">
                             <h2 className="text-white text-center">Edit Profile</h2>
                             <form>
@@ -79,7 +95,7 @@ const EditProfile = ({ user }) => {
                                         <span className="label-text text-gray-400">Age</span>
                                     </label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         value={age}
                                         min={16}
                                         max={120}
@@ -101,16 +117,45 @@ const EditProfile = ({ user }) => {
                                     <label className="label">
                                         <span className="label-text text-gray-400">Skills</span>
                                     </label>
-                                    <input
-                                        type="text"
-                                        value={skills}
-                                        onChange={(e) => setSkills(e.target.value)}
-                                        className="input input-bordered input-success w-full bg-transparent text-white placeholder-gray-500"
-                                    />
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="text"
+                                            value={currentSkill}
+                                            onChange={(e) => setCurrentSkill(e.target.value)}
+                                            className="input input-bordered input-success w-full bg-transparent text-white placeholder-gray-500"
+                                            placeholder="Enter a skill"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={addSkill}
+                                            className="btn bg-blue-600 text-white"
+                                        >
+                                            Add
+                                        </button>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                        {skills.map((skill, index) => (
+                                            <div
+                                                key={index}
+                                                className="badge badge-primary flex items-center gap-2 p-2"
+                                            >
+                                                {skill}
+                                                <button
+                                                    onClick={() => removeSkill(skill)}
+                                                    className="text-white hover:text-red-500"
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                                 <div className="form-control mt-6">
                                     <p className="text-red-500 pb-2">{error}</p>
-                                    <button onClick={handleSave} className="btn bg-black bg-opacity-50 backdrop-filter backdrop-blur-md text-white w-full border border-white border-opacity-20 hover:bg-gray-800">
+                                    <button
+                                        onClick={handleSave}
+                                        className="btn bg-black bg-opacity-50 backdrop-filter backdrop-blur-md text-white w-full border border-white border-opacity-20 hover:bg-gray-800"
+                                    >
                                         Save
                                     </button>
                                 </div>
@@ -128,7 +173,7 @@ const EditProfile = ({ user }) => {
                 </div>
             )}
         </>
-    )
-}
+    );
+};
 
-export default EditProfile
+export default EditProfile;
